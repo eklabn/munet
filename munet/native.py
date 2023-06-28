@@ -939,20 +939,40 @@ ff02::2\tip6-allrouters
                 return
 
         if ipaddr:
+            # Check if the two sides of this link are assigned
+            # different subnets.  If so, set the peer address.
+            set_peer = False
+            if oipaddr and ipaddr.network != oipaddr.network:
+                set_peer = True
             ifname = cconf["name"]
             self.set_intf_addr(ifname, ipaddr)
             self.logger.debug("%s: adding %s to p2p intf %s", self, ipaddr, ifname)
             if "physical" not in cconf and not self.is_vm:
-                self.intf_ip_cmd(ifname, f"ip addr add {ipaddr} dev {ifname}")
+                if set_peer:
+                    self.logger.debug("%s: setting peer address %s", self, oipaddr)
+                    self.intf_ip_cmd(
+                        ifname, f"ip addr add {ipaddr.ip} peer {oipaddr} dev {ifname}"
+                    )
+                else:
+                    self.intf_ip_cmd(ifname, f"ip addr add {ipaddr} dev {ifname}")
 
         if oipaddr:
+            set_peer = False
+            if ipaddr and ipaddr.network != oipaddr.network:
+                set_peer = True
             oifname = occonf["name"]
             other.set_intf_addr(oifname, oipaddr)
             self.logger.debug(
                 "%s: adding %s to other p2p intf %s", other, oipaddr, oifname
             )
             if "physical" not in occonf and not other.is_vm:
-                other.intf_ip_cmd(oifname, f"ip addr add {oipaddr} dev {oifname}")
+                if set_peer:
+                    other.logger.debug("%s: setting peer address %s", other, ipaddr)
+                    other.intf_ip_cmd(
+                        oifname, f"ip addr add {oipaddr.ip} peer {ipaddr} dev {oifname}"
+                    )
+                else:
+                    other.intf_ip_cmd(oifname, f"ip addr add {oipaddr} dev {oifname}")
 
     def set_p2p_addr(self, other, cconf, occonf):
         self._set_p2p_addr(other, cconf, occonf, ipv6=False)
