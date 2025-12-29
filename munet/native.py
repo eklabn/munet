@@ -3284,10 +3284,10 @@ ff02::2\tip6-allrouters
 
         do_add_dummy = True
         if "hostintf" in c1:
-            await n.add_host_intf(c1["hostintf"], c1["name"], mtu=c1.get("mtu"))
+            await node1.add_host_intf(c1["hostintf"], c1["name"], mtu=c1.get("mtu"))
             do_add_dummy = False
         elif "physical" in c1:
-            await n.add_phy_intf(c1["physical"], c1["name"])
+            await node1.add_phy_intf(c1["physical"], c1["name"])
             do_add_dummy = False
 
         if do_add_dummy:
