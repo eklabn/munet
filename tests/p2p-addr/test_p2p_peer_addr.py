@@ -5,20 +5,15 @@
 #
 # Copyright 2023, LabN Consulting, L.L.C.
 #
-"Testing of unconnected interface."
+"Test p2p peer addresses"
 import logging
-
 import pytest
 
 # All tests are coroutines
 pytestmark = pytest.mark.asyncio
 
 
-@pytest.mark.parametrize(
-    "unet_perfunc", ["munet", "noinit", "noinit-noshell"], indirect=["unet_perfunc"]
-)
-async def test_peer_address(unet_perfunc):
-    unet = unet_perfunc
+async def test_peer_address(unet):
     rc, o, e = await unet.hosts["r1"].async_cmd_status(f"ip addr show dev eth0")
     assert rc == 0
     assert o.find("mtu 4500") > -1
@@ -32,8 +27,7 @@ async def test_peer_address(unet_perfunc):
     assert o.find("inet6 2001:db8::1:1 peer 2001:db8::1/128") > -1
 
 
-async def test_peer_ping(unet_perfunc):
-    unet = unet_perfunc
+async def test_peer_ping(unet):
     r1eth0 = unet.hosts["r1"].get_intf_addr("eth0").ip
     logging.debug("r1eth0 is %s", r1eth0)
     o = await unet.hosts["r2"].async_cmd_raises(f"ping -w1 -c1 172.16.0.1")
