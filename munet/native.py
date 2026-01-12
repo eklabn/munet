@@ -1076,7 +1076,7 @@ ff02::2\tip6-allrouters
                 if set_peer:
                     self.logger.debug("%s: setting peer address %s", self, oipaddr)
                     self.intf_ip_cmd(
-                        ifname, f"ip addr add {ipaddr.ip} peer {oipaddr} dev {ifname}"
+                        ifname, f"ip addr add {ipaddr.ip} peer {oipaddr.network} dev {ifname}"
                     )
                 else:
                     self.intf_ip_cmd(ifname, f"ip addr add {ipaddr} dev {ifname}")
@@ -1094,7 +1094,7 @@ ff02::2\tip6-allrouters
                 if set_peer:
                     other.logger.debug("%s: setting peer address %s", other, ipaddr)
                     other.intf_ip_cmd(
-                        oifname, f"ip addr add {oipaddr.ip} peer {ipaddr} dev {oifname}"
+                        oifname, f"ip addr add {oipaddr.ip} peer {ipaddr.network} dev {oifname}"
                     )
                 else:
                     other.intf_ip_cmd(oifname, f"ip addr add {oipaddr} dev {oifname}")
@@ -2260,7 +2260,7 @@ class L3QemuVM(L3NodeMixin, LinuxNamespace):
                     and ifaddr.network != oifaddr.network
                 ):
                     con.cmd_raises(
-                        f"ip addr add {ifaddr} peer {oifaddr.ip} dev {ifname}"
+                        f"ip addr add {ifaddr.ip} peer {oifaddr.network} dev {ifname}"
                     )
                 else:
                     con.cmd_raises(f"ip addr add {ifaddr} dev {ifname}")
@@ -2276,7 +2276,7 @@ class L3QemuVM(L3NodeMixin, LinuxNamespace):
                     and ifaddr.network != oifaddr.network
                 ):
                     con.cmd_raises(
-                        f"ip addr add {ifaddr} peer {oifaddr.ip} dev {ifname}"
+                        f"ip addr add {ifaddr.ip} peer {oifaddr.network} dev {ifname}"
                     )
                 else:
                     con.cmd_raises(f"ip -6 addr add {ifaddr} dev {ifname}")
