@@ -17,8 +17,8 @@ async def test_peer_address(unet):
     rc, o, e = await unet.hosts["r1"].async_cmd_status(f"ip addr show dev eth0")
     assert rc == 0
     assert o.find("mtu 4500") > -1
-    assert o.find("inet 172.16.0.1 peer 172.16.1.2/24") > -1
-    assert o.find("inet6 2001:db8::1 peer 2001:db8::1:1/112") > -1
+    assert o.find("inet 172.16.0.1 peer 172.16.1.0/24") > -1
+    assert o.find("inet6 2001:db8::1 peer 2001:db8::1:0/112") > -1
 
     rc, o, e = await unet.hosts["r2"].async_cmd_status(f"ip addr show dev eth0")
     assert rc == 0
