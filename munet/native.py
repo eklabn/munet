@@ -1076,7 +1076,8 @@ ff02::2\tip6-allrouters
                 if set_peer:
                     self.logger.debug("%s: setting peer address %s", self, oipaddr)
                     self.intf_ip_cmd(
-                        ifname, f"ip addr add {ipaddr.ip} peer {oipaddr.network} dev {ifname}"
+                        ifname,
+                        f"ip addr add {ipaddr.ip} peer {oipaddr.network} dev {ifname}",
                     )
                 else:
                     self.intf_ip_cmd(ifname, f"ip addr add {ipaddr} dev {ifname}")
@@ -1094,7 +1095,8 @@ ff02::2\tip6-allrouters
                 if set_peer:
                     other.logger.debug("%s: setting peer address %s", other, ipaddr)
                     other.intf_ip_cmd(
-                        oifname, f"ip addr add {oipaddr.ip} peer {ipaddr.network} dev {oifname}"
+                        oifname,
+                        f"ip addr add {oipaddr.ip} peer {ipaddr.network} dev {oifname}",
                     )
                 else:
                     other.intf_ip_cmd(oifname, f"ip addr add {oipaddr} dev {oifname}")
